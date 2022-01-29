@@ -26,10 +26,12 @@ provider:
     profile: serverlessUser
     environment:
         tableName: ${self:custom.tableName}
+        bucketName: ${self:custom.bucketName}
     iamRoleStatements:
         - Effect: Allow
           Action:
               - dynamodb:*
+              - S3:*
           Resource: "*"
 
 # you can overwrite defaults here
@@ -74,6 +76,7 @@ package:
 
 custom:
     tableName: player-points
+    bucketName: myserverlessprojectuploadbucket-sherukhan
     s3Sync:
         - bucketName: myserverlessprojectuploadbucket-sherukhan
           localDir: UploadData
@@ -99,6 +102,20 @@ functions:
             - http:
                   path: create-player-score/{ID}
                   method: POST
+                  cors: true
+    createFile:
+        handler: lambdas/endpoints/createFile.handler
+        events: 
+            - http:
+                  path: create-file/{fileName}
+                  method: POST
+                  cors: true
+    getFile:
+        handler: lambdas/endpoints/getFile.handler
+        events: 
+            - http:
+                  path: get-file/{fileName}
+                  method: GET
                   cors: true
 
 #    The following are a few example events you can configure
@@ -147,7 +164,7 @@ resources:
         DemoBucketUpload:
             Type: AWS::S3::Bucket
             Properties:
-                BucketName: myserverlessprojectuploadbucket-sherukhan
+                BucketName: ${self:custom.bucketName}
         MyDynamodbTable:
             Type: AWS::DynamoDB::Table
             Properties:
