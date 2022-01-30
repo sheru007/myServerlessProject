@@ -15,6 +15,7 @@ provider:
           Action:
               - dynamodb:*
               - S3:*
+              - ses:*
           Resource: "*"
 
 plugins:
@@ -77,6 +78,13 @@ functions:
             - http:
                   path: get-file/{fileName}
                   method: GET
+                  cors: true
+    sendEmail:
+        handler: lambdas/endpoints/sendEmail.handler
+        events: 
+            - http:
+                  path: send-email
+                  method: POST
                   cors: true
     proxy:
         handler: lambdas/endpoints/proxy.handler
