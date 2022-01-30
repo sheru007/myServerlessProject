@@ -86,7 +86,7 @@ functions:
                   method: ANY
                   integration: http-proxy
                   request: 
-                      uri: http://api.icndb.com/{proxy}
+                      uri: http://api.icndb.com/{proxy}  #proxy = /jokes/random or jokes/18
                       parameters: 
                           paths:
                               proxy: true
