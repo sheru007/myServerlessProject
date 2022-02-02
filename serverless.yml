@@ -16,6 +16,8 @@ provider:
               - dynamodb:*
               - S3:*
               - ses:*
+              - sns:SetSMSAttributes
+              - sns:Publish
           Resource: "*"
 
 plugins:
@@ -84,6 +86,13 @@ functions:
         events: 
             - http:
                   path: send-email
+                  method: POST
+                  cors: true
+    sendSMS:
+        handler: lambdas/endpoints/sendSMS.handler
+        events: 
+            - http:
+                  path: send-sms
                   method: POST
                   cors: true
     proxy:
