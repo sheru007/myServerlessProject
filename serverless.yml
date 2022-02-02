@@ -18,6 +18,7 @@ provider:
               - ses:*
               - sns:SetSMSAttributes
               - sns:Publish
+              - comprehend:*
           Resource: "*"
 
 plugins:
@@ -93,6 +94,13 @@ functions:
         events: 
             - http:
                   path: send-sms
+                  method: POST
+                  cors: true
+    analyseText:
+        handler: lambdas/endpoints/analyseText.handler
+        events: 
+            - http:
+                  path: analyse-text
                   method: POST
                   cors: true
     proxy:
