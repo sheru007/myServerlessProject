@@ -89,6 +89,14 @@ functions:
                   path: send-email
                   method: POST
                   cors: true
+    reminderEmail:
+        handler: lambdas/endpoints/reminderEmail.handler
+        events: 
+            - schedule: cron(0 9 ? * 6 *)    # minute hours day-of-month every-month(*) day-of-week(7 means saturday) every-week(*)
+    morningNews:
+        handler: lambdas/endpoints/morningNews.handler
+        events: 
+            - schedule: cron(15 7 ? * * *)
     sendSMS:
         handler: lambdas/endpoints/sendSMS.handler
         events: 
