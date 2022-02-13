@@ -78,6 +78,13 @@ functions:
                   path: update-player-score/{ID}
                   method: PUT
                   cors: true
+    getGameScores:
+        handler: lambdas/endpoints/getGameScores.handler
+        events:
+            - http:
+                  path: get-game-scores/{game}
+                  method: GET
+                  cors: true
     createFile:
         handler: lambdas/endpoints/createFile.handler
         events: 
@@ -202,10 +209,19 @@ resources:
                 AttributeDefinitions:
                     - AttributeName: ID
                       AttributeType: S
+                    - AttributeName: game
+                      AttributeType: S
                 KeySchema:
                     - AttributeName: ID
                       KeyType: HASH
                 BillingMode: PAY_PER_REQUEST
+                GlobalSecondaryIndexes:
+                    - IndexName: game-index
+                      KeySchema: 
+                          - AttributeName: game
+                            KeyType: HASH
+                      Projection:
+                          ProjectionType: ALL
         myAssumeRole:
             Type: AWS::IAM::Role
             Properties:
