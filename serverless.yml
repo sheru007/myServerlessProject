@@ -7,9 +7,12 @@ provider:
     name: aws
     runtime: nodejs12.x
     profile: serverlessUser
+    region: us-east-1
     environment:
         tableName: ${self:custom.tableName}
         bucketName: ${self:custom.bucketName}
+        imageUploadBucket: ${self:custom.imageUploadBucket}
+        region: ${self:provider.region}
     iamRoleStatements:
         - Effect: Allow
           Action:
@@ -33,6 +36,7 @@ custom:
     tableName: player-points
     bucketName: myserverlessprojectuploadbucket-sherukhan
     reactBucketName: myserverlessprojectuploadreactbucket-sherukhan1997
+    imageUploadBucket: myserverlessproject-image-upload-sk007
     s3Sync:
         - bucketName: ${self:custom.bucketName}
           localDir: UploadData
@@ -90,6 +94,13 @@ functions:
         events: 
             - http:
                   path: create-file/{fileName}
+                  method: POST
+                  cors: true
+    imageUpload:
+        handler: lambdas/endpoints/imageUpload.handler
+        events: 
+            - http:
+                  path: image-upload
                   method: POST
                   cors: true
     getFile:
@@ -155,6 +166,11 @@ resources:
                 WebsiteConfiguration:
                     IndexDocument: index.html
                     ErrorDocument: index.html
+        ImageUploadBucket:
+            Type: AWS::S3::Bucket
+            Properties:
+                BucketName: ${self:custom.imageUploadBucket}
+                AccessControl: PublicRead
         S3AccessPolicy:
             Type: AWS::S3::BucketPolicy
             Properties:
