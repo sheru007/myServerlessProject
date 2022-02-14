@@ -25,10 +25,10 @@ provider:
           Resource: "*"
 
 plugins:
-    - serverless-s3-sync
-    - serverless-webpack
-    - serverless-add-api-key
-
+  - serverless-s3-sync
+  - serverless-webpack
+  - serverless-add-api-key
+  - serverless-plugin-split-stacks
 package:
     individually: true
 
@@ -37,6 +37,11 @@ custom:
     bucketName: myserverlessprojectuploadbucket-sherukhan
     reactBucketName: myserverlessprojectuploadreactbucket-sherukhan1997
     imageUploadBucket: myserverlessproject-image-upload-sk007
+    splitStacks: 
+        perFunction: false #convert each function to stack and root have all resource root: 114
+        perType: false # convert 14 into 1 and root: 114
+        perGroupFunction: true
+        nestedStackCount: 3
     s3Sync:
         - bucketName: ${self:custom.bucketName}
           localDir: UploadData
