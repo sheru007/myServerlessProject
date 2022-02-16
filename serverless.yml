@@ -26,17 +26,29 @@ provider:
 
 plugins:
   - serverless-s3-sync
-  - serverless-webpack
+#   - serverless-webpack
   - serverless-add-api-key
   - serverless-plugin-split-stacks
-package:
-    individually: true
+  - serverless-dynamodb-local
+  - serverless-offline    #sls offline start for not-dependent api
+
+# package:
+#     individually: true
 
 custom:
     tableName: player-points
     bucketName: myserverlessprojectuploadbucket-sherukhan
     reactBucketName: myserverlessprojectuploadreactbucket-sherukhan1997
     imageUploadBucket: myserverlessproject-image-upload-sk007
+    dynamodb:
+        stages:
+            - dev
+        start:
+            port: 8000
+            inMemory: true
+            migrate: true
+        migration:
+            dir: offline/migrations
     splitStacks: 
         perFunction: false #convert each function to stack and root have all resource root: 114
         perType: false # convert 14 into 1 and root: 114
